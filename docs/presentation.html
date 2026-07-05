@@ -660,16 +660,18 @@ function handleDemoAudio() {
   const audio = document.getElementById('demo-audio');
   if (!audio) return;
   audio.playbackRate = 2.0;
+  // ラジオ終了時に自動進行（autoAdvanceがONの場合のみ）
+  audio.onended = () => { if (autoAdvance && cur < total - 1) go(1); };
   audio.play();
 }
 
 function go(dir) {
   const next = cur + dir;
   if (next < 0 || next >= total) return;
-  // デモスライドを離れるとき音声を止める
+  // デモスライドを離れるとき音声を止め、自動進行ハンドラも解除
   if (cur === 1) {
     const audio = document.getElementById('demo-audio');
-    if (audio) audio.pause();
+    if (audio) { audio.onended = null; audio.pause(); }
   }
   slides[cur].classList.remove('on');
   cur = next;
