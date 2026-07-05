@@ -293,30 +293,35 @@ body{
       <div class="f-em">🔍</div>
       <div class="f-name">並列リサーチ</div>
       <div class="f-sub">複数AIが観点を分けて同時調査</div>
+      <div style="font-size:.7rem;color:var(--blue);margin-top:6px;font-family:monospace">workflow/research.md</div>
     </div>
     <div class="flow-arrow">→</div>
     <div class="flow-step">
       <div class="f-em">📝</div>
       <div class="f-name">台本生成</div>
       <div class="f-sub">キャラ設定に従い自動生成</div>
+      <div style="font-size:.7rem;color:var(--blue);margin-top:6px;font-family:monospace">workflow/scriptwriting.md</div>
     </div>
     <div class="flow-arrow">→</div>
     <div class="flow-step">
       <div class="f-em">✅</div>
       <div class="f-name">自動チェック</div>
       <div class="f-sub">基準を満たすまで自動修正</div>
+      <div style="font-size:.7rem;color:var(--blue);margin-top:6px;font-family:monospace">workflow/review.md</div>
     </div>
     <div class="flow-arrow">→</div>
     <div class="flow-step">
       <div class="f-em">🔊</div>
       <div class="f-name">音声生成</div>
       <div class="f-sub">VOICEVOX で音声変換</div>
+      <div style="font-size:.7rem;color:var(--blue);margin-top:6px;font-family:monospace">workflow/audio.md</div>
     </div>
     <div class="flow-arrow">→</div>
     <div class="flow-step">
       <div class="f-em">💾</div>
       <div class="f-name">GitHub バックアップ</div>
       <div class="f-sub">台本・音声・調査メモを保存</div>
+      <div style="font-size:.7rem;color:var(--blue);margin-top:6px;font-family:monospace">workflow/publish.md</div>
     </div>
   </div>
   <div class="left-o" style="max-width:960px">
@@ -371,6 +376,7 @@ body{
       <div class="tech-step"><div class="tech-step-num">②</div><span><strong>ファイルセット管理：</strong>台本・音声・調査メモをエピソード単位でまとめて保存</span></div>
       <div class="tech-step"><div class="tech-step-num">③</div><span><strong>安全性：</strong>ファイル単位で対象を管理し、意図しないファイルの混入を防ぐ</span></div>
       <div class="tech-step"><div class="tech-step-num">④</div><span><strong>誤保存防止：</strong>設定ファイルや他エピソードは対象外。パス指定で厳密に管理</span></div>
+      <div class="tech-step"><div class="tech-step-num">⑤</div><span><strong>認証：</strong>GitHub の接続情報は <strong>Windows 資格情報マネージャー</strong> で管理。<code style="background:#f0f0f0;padding:1px 5px;border-radius:3px">gh auth login</code> で一度認証すれば、以降の push は自動で通る</span></div>
     </div>
     <div class="tech-panel">
       <div class="tech-panel-title"><span class="tech-panel-em">💻</span>Claude が実行する git コマンド</div>
@@ -465,6 +471,7 @@ AIがウェブで情報を調査して台本を書き、音声ファイルに変
 
   /* 5: 制作フロー */
   `フローはテーマ入力から始まり、リサーチ・台本生成・チェック・音声変換・バックアップまで一直線に進みます。
+各工程はworkflowフォルダのマークダウンファイルで定義されています。research、scriptwriting、review、audio、publishの5つです。
 リサーチ工程では「栄養」「歴史」「文化」の担当を別々のAIに同時に割り当てる並列処理を採用しています。
 1つずつ順番にやるより大幅に速く、品質も向上します。`,
 
@@ -480,7 +487,8 @@ VOICEVOXが起動していない場合は自動で起動して待機するため
 エピソードごとに台本・音声・調査メモをセットで保存することで、過去のエピソードをいつでも参照できます。
 重要なポイントは、git add ドットを使わないことです。
 パス指定で対象ファイルだけをコミットするルールをClaude Codeにあらかじめ定義しておくことで、
-設定ファイルや他のエピソードが誤って混入するのを防いでいます。`,
+設定ファイルや他のエピソードが誤って混入するのを防いでいます。
+また、GitHubへの接続認証情報はWindowsの資格情報マネージャーで管理しています。gh auth loginで一度認証するだけで、以降のpushは自動で通ります。`,
 
   /* 8: まとめ */
   `まとめです。
