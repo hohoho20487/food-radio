@@ -11,7 +11,6 @@
 - scripts/YYYYMMDD_ep###_テーマ.wav（音声）
 - knowledge/〇〇.md（その回で新規作成・更新したナレッジ）
 
-リポジトリは private のため、ナレッジ・音声も含めて push する。
 設定ファイル（CLAUDE.md / tts.py / workflow/ など）や他回の生成物は対象に含めない。
 `git add -A` や `git add .` は使わず、必ずパス指定で add すること。
 
