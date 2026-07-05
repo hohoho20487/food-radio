@@ -609,7 +609,12 @@ function speak(index) {
   utter.lang = 'ja-JP';
   utter.rate = 0.95;
   utter.pitch = 1.0;
-  utter.onend = () => { if (autoAdvance && cur < total - 1) go(1); };
+  if (index === 1) {
+    // デモスライド：ナレーション終了後にラジオを再生
+    utter.onend = () => { handleDemoAudio(); };
+  } else {
+    utter.onend = () => { if (autoAdvance && cur < total - 1) go(1); };
+  }
   window.speechSynthesis.speak(utter);
 }
 
@@ -651,26 +656,28 @@ function updateUI() {
   document.getElementById('prog').style.width = ((cur+1)/total*100) + '%';
 }
 
-function handleDemoAudio(index) {
+function handleDemoAudio() {
   const audio = document.getElementById('demo-audio');
   if (!audio) return;
-  if (index === 1) {
-    audio.playbackRate = 2.0;
-    audio.play();
-  } else {
-    audio.pause();
-  }
+  audio.playbackRate = 2.0;
+  audio.play();
 }
 
 function go(dir) {
   const next = cur + dir;
   if (next < 0 || next >= total) return;
+  // デモスライドを離れるとき音声を止める
+  if (cur === 1) {
+    const audio = document.getElementById('demo-audio');
+    if (audio) audio.pause();
+  }
   slides[cur].classList.remove('on');
   cur = next;
   slides[cur].classList.add('on');
   updateUI();
   speak(cur);
-  handleDemoAudio(cur);
+  // 読み上げOFFのときだけ即時再生
+  if (cur === 1 && !narrationOn) handleDemoAudio();
 }
 
 document.addEventListener('keydown', e => {
