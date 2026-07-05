@@ -34,7 +34,7 @@ body{
 .sl{
   position:absolute;inset:0;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:52px 72px 24px;
+  padding:30px 44px 12px;
   opacity:0;transition:opacity .38s ease;
   pointer-events:none;
 }
@@ -46,13 +46,13 @@ body{
 #cnt{font-size:13px;color:var(--muted);min-width:66px;text-align:center}
 
 /* 共通 */
-.tag{position:absolute;top:14px;left:24px;font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase}
-.sec-title{font-size:2.2rem;font-weight:900;text-align:center;line-height:1.3;margin-bottom:22px}
+.tag{position:absolute;top:10px;left:20px;font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase}
+.sec-title{font-size:2.4rem;font-weight:900;text-align:center;line-height:1.3;margin-bottom:16px}
 .hlite{background:linear-gradient(transparent 52%,rgba(100,220,140,.5) 48%);padding:0 3px}
-.left-g{border-left:5px solid var(--green);padding:12px 18px;background:var(--grn-bg);border-radius:0 8px 8px 0;font-size:.95rem;line-height:1.6}
-.left-b{border-left:5px solid var(--blue);padding:12px 18px;background:var(--blu-bg);border-radius:0 8px 8px 0;font-size:.95rem;line-height:1.6}
-.left-o{border-left:5px solid var(--orange);padding:12px 18px;background:var(--org-bg);border-radius:0 8px 8px 0;font-size:.95rem;line-height:1.6}
-.left-p{border-left:5px solid var(--purple);padding:12px 18px;background:var(--pur-bg);border-radius:0 8px 8px 0;font-size:.95rem;line-height:1.6}
+.left-g{border-left:5px solid var(--green);padding:11px 18px;background:var(--grn-bg);border-radius:0 8px 8px 0;font-size:1rem;line-height:1.6}
+.left-b{border-left:5px solid var(--blue);padding:11px 18px;background:var(--blu-bg);border-radius:0 8px 8px 0;font-size:1rem;line-height:1.6}
+.left-o{border-left:5px solid var(--orange);padding:11px 18px;background:var(--org-bg);border-radius:0 8px 8px 0;font-size:1rem;line-height:1.6}
+.left-p{border-left:5px solid var(--purple);padding:11px 18px;background:var(--pur-bg);border-radius:0 8px 8px 0;font-size:1rem;line-height:1.6}
 .pulse{animation:pulse 2.2s ease-in-out infinite}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
 
@@ -63,70 +63,70 @@ body{
 .s1-note{font-size:1rem;color:var(--muted);border-bottom:2px dashed #ccc;padding-bottom:4px;text-align:center}
 
 /* 概要 */
-.io-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;width:100%;max-width:900px}
-.io-box{background:#fff;border:2px solid var(--border);border-radius:12px;padding:24px 28px}
-.io-title{font-size:1rem;font-weight:900;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.io-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;width:100%;max-width:920px}
+.io-box{background:#fff;border:2px solid var(--border);border-radius:12px;padding:20px 24px}
+.io-title{font-size:1.05rem;font-weight:900;margin-bottom:12px;display:flex;align-items:center;gap:10px}
 .io-em{font-size:1.6rem}
-.io-code{background:#1C1C2E;color:#3fb950;font-family:monospace;font-size:.95rem;padding:14px 18px;border-radius:8px;margin-top:8px;line-height:1.7}
-.io-item{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:.95rem}
+.io-code{background:#F0F4F8;color:#15803D;font-family:monospace;font-size:1rem;padding:12px 16px;border-radius:8px;margin-top:8px;line-height:1.7;border:1px solid #CBD5E1;font-weight:700}
+.io-item{display:flex;align-items:center;gap:10px;margin-bottom:9px;font-size:1rem}
 
 /* ブレインストーミング */
-.qa-wrap{width:100%;max-width:880px;display:flex;flex-direction:column;gap:10px}
-.qa-row{display:flex;align-items:flex-start;gap:14px;background:#fff;border:1px solid var(--border);border-radius:8px;padding:12px 16px}
-.qa-num{background:var(--blue);color:#fff;font-size:.78rem;font-weight:700;padding:3px 10px;border-radius:12px;white-space:nowrap;margin-top:2px;flex-shrink:0}
-.qa-q{font-size:.93rem;font-weight:700;flex:1}
-.qa-a{font-size:.9rem;color:var(--green);font-weight:700;flex:1;border-left:2px solid var(--border);padding-left:12px}
+.qa-wrap{width:100%;max-width:900px;display:flex;flex-direction:column;gap:8px}
+.qa-row{display:flex;align-items:flex-start;gap:14px;background:#fff;border:1px solid var(--border);border-radius:8px;padding:10px 16px}
+.qa-num{background:var(--blue);color:#fff;font-size:.8rem;font-weight:700;padding:3px 10px;border-radius:12px;white-space:nowrap;margin-top:2px;flex-shrink:0}
+.qa-q{font-size:1rem;font-weight:700;flex:1}
+.qa-a{font-size:.97rem;color:var(--green);font-weight:700;flex:1;border-left:2px solid var(--border);padding-left:12px}
 
 /* キャラ */
-.char-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;width:100%;max-width:900px}
-.char-box{background:#fff;border:2px solid var(--border);border-radius:12px;padding:26px 28px}
+.char-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;width:100%;max-width:920px}
+.char-box{background:#fff;border:2px solid var(--border);border-radius:12px;padding:20px 24px}
 .char-name{font-size:2rem;font-weight:900;margin-bottom:4px}
-.char-role-tag{display:inline-block;font-size:.8rem;font-weight:700;padding:3px 12px;border-radius:20px;margin-bottom:14px}
-.char-desc{font-size:.92rem;color:#444;line-height:1.7;margin-bottom:14px}
-.char-quote{background:var(--bg);border-radius:8px;padding:12px 14px;font-size:.85rem;line-height:1.9;border:1px solid var(--border)}
+.char-role-tag{display:inline-block;font-size:.85rem;font-weight:700;padding:3px 12px;border-radius:20px;margin-bottom:12px}
+.char-desc{font-size:.97rem;color:#333;line-height:1.7;margin-bottom:12px}
+.char-quote{background:var(--bg);border-radius:8px;padding:10px 14px;font-size:.9rem;line-height:1.9;border:1px solid var(--border)}
 .char-quote-label{font-size:.75rem;font-weight:700;color:var(--muted);margin-bottom:6px}
 
 /* 台本 */
-.script-wrap{width:100%;max-width:860px;background:#fff;border:2px solid var(--border);border-radius:12px;padding:28px 32px}
-.script-line{display:flex;gap:10px;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--border);font-size:.95rem;line-height:1.6}
+.script-wrap{width:100%;max-width:900px;background:#fff;border:2px solid var(--border);border-radius:12px;padding:20px 28px}
+.script-line{display:flex;gap:10px;align-items:baseline;padding:6px 0;border-bottom:1px solid var(--border);font-size:1rem;line-height:1.6}
 .script-line:last-child{border-bottom:none}
 .script-speaker{font-weight:900;white-space:nowrap;flex-shrink:0;width:48px}
 .script-text{color:#333}
 .divider-line{border:none;border-top:2px dashed var(--border);margin:12px 0}
 
 /* フロー */
-.flow-wrap{display:flex;align-items:stretch;width:100%;max-width:960px;gap:0;margin-bottom:20px}
-.flow-step{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:18px 10px;background:#fff;border:2px solid var(--border);border-radius:10px;margin:0 5px;font-size:.85rem;line-height:1.4}
-.flow-step .f-em{font-size:2rem;margin-bottom:8px}
-.flow-step .f-name{font-weight:700;margin-bottom:4px;font-size:.9rem}
-.flow-step .f-sub{font-size:.75rem;color:var(--muted)}
+.flow-wrap{display:flex;align-items:stretch;width:100%;max-width:980px;gap:0;margin-bottom:14px}
+.flow-step{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:14px 8px;background:#fff;border:2px solid var(--border);border-radius:10px;margin:0 4px;font-size:.88rem;line-height:1.4}
+.flow-step .f-em{font-size:1.8rem;margin-bottom:6px}
+.flow-step .f-name{font-weight:700;margin-bottom:4px;font-size:.95rem}
+.flow-step .f-sub{font-size:.78rem;color:var(--muted)}
 .flow-arrow{display:flex;align-items:center;color:var(--border);font-size:1.4rem;flex-shrink:0;margin:0 -2px}
 
-/* コードブロック */
-.code-block{background:#1C1C2E;border-radius:10px;padding:20px 24px;font-family:monospace;font-size:.88rem;line-height:1.9;width:100%;max-width:900px}
-.code-comment{color:#6e7681}
-.code-cmd{color:#3fb950}
-.code-str{color:#a5d6ff}
-.code-kw{color:#ff7b72}
-.code-fn{color:#d2a8ff}
-.code-url{color:#ffa657}
+/* コードブロック（ライトテーマ） */
+.code-block{background:#F0F4F8;border:1px solid #CBD5E1;border-radius:10px;padding:16px 20px;font-family:monospace;font-size:.92rem;line-height:1.9;width:100%;max-width:900px;color:#1E293B}
+.code-comment{color:#64748B}
+.code-cmd{color:#15803D;font-weight:700}
+.code-str{color:#1D4ED8}
+.code-kw{color:#B91C1C;font-weight:700}
+.code-fn{color:#7C3AED}
+.code-url{color:#B45309;font-weight:700}
 
 /* 技術2カラム */
-.tech-2col{display:grid;grid-template-columns:1fr 1fr;gap:24px;width:100%;max-width:960px;margin-bottom:18px}
-.tech-panel{background:#fff;border:2px solid var(--border);border-radius:12px;padding:22px 24px}
-.tech-panel-title{font-size:1rem;font-weight:900;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.tech-2col{display:grid;grid-template-columns:1fr 1fr;gap:18px;width:100%;max-width:980px;margin-bottom:14px}
+.tech-panel{background:#fff;border:2px solid var(--border);border-radius:12px;padding:18px 20px}
+.tech-panel-title{font-size:1.05rem;font-weight:900;margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .tech-panel-em{font-size:1.4rem}
-.tech-step{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:.88rem;line-height:1.5}
-.tech-step-num{background:var(--blue);color:#fff;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0;margin-top:1px}
+.tech-step{display:flex;align-items:flex-start;gap:10px;margin-bottom:9px;font-size:.93rem;line-height:1.55}
+.tech-step-num{background:var(--blue);color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;flex-shrink:0;margin-top:1px}
 
 /* まとめ */
-.ru3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;width:100%;max-width:900px;margin-bottom:20px}
-.ru-item{text-align:center;padding:18px 14px}
-.ru-num{font-size:4rem;font-weight:900;color:var(--green);opacity:.15;line-height:1;margin-bottom:-14px}
-.ru-title{font-size:1.5rem;font-weight:900;margin-bottom:8px}
+.ru3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;width:100%;max-width:920px;margin-bottom:16px}
+.ru-item{text-align:center;padding:14px 12px}
+.ru-num{font-size:3.6rem;font-weight:900;color:var(--green);opacity:.15;line-height:1;margin-bottom:-12px}
+.ru-title{font-size:1.6rem;font-weight:900;margin-bottom:8px}
 .ru-title::after{content:'';display:block;width:36px;height:3px;background:var(--green);margin:8px auto 0;border-radius:2px}
-.ru-body{font-size:.9rem;color:#555;line-height:1.6}
-.final{text-align:center;font-size:1rem;color:#444;border-top:2px solid var(--border);padding-top:16px;max-width:740px;line-height:1.7}
+.ru-body{font-size:.97rem;color:#444;line-height:1.6}
+.final{text-align:center;font-size:1.05rem;color:#333;border-top:2px solid var(--border);padding-top:14px;max-width:760px;line-height:1.7}
 
 /* デモスライド */
 .demo-player-wrap{background:#fff;border:2px solid var(--border);border-radius:20px;padding:36px 56px;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,.07)}
@@ -432,7 +432,7 @@ audio{width:420px;margin:4px 0 14px;accent-color:var(--green)}
     </div>
     <div class="tech-panel">
       <div class="tech-panel-title"><span class="tech-panel-em">💻</span>APIの呼び出しコード</div>
-      <div class="code-block" style="font-size:.78rem;padding:14px 16px;">
+      <div class="code-block" style="font-size:.88rem;padding:14px 16px;">
         <span class="code-comment"># ① 音声クエリを生成</span><br>
         query = requests.<span class="code-fn">post</span>(<br>
         &nbsp;&nbsp;<span class="code-str">"http://localhost:50021/audio_query"</span>,<br>
@@ -469,7 +469,7 @@ audio{width:420px;margin:4px 0 14px;accent-color:var(--green)}
     </div>
     <div class="tech-panel">
       <div class="tech-panel-title"><span class="tech-panel-em">💻</span>Claude が実行する git コマンド</div>
-      <div class="code-block" style="font-size:.8rem;padding:14px 16px;">
+      <div class="code-block" style="font-size:.88rem;padding:14px 16px;">
         <span class="code-comment"># その回のファイルだけを指定してステージング</span><br>
         <span class="code-cmd">git add</span> <span class="code-str">"scripts/20260704_ep009_ラーメン.md"</span> \<br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="code-str">"scripts/20260704_ep009_ラーメン.wav"</span> \<br>
