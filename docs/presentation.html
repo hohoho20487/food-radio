@@ -289,10 +289,21 @@ body{
       <div class="f-sub">人間がやるのはこれだけ</div>
     </div>
     <div class="flow-arrow">→</div>
-    <div class="flow-step">
+    <div class="flow-step" style="flex:2;background:var(--blu-bg);border:2px solid var(--blue)">
       <div class="f-em">🔍</div>
-      <div class="f-name">並列リサーチ</div>
-      <div class="f-sub">複数AIが観点を分けて同時調査</div>
+      <div class="f-name" style="color:var(--blue)">並列リサーチ</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;width:100%;margin:8px 0">
+        <div style="background:#fff;border:1px solid var(--blue);border-radius:6px;padding:5px 3px;text-align:center;font-size:.68rem;line-height:1.4">
+          🤖<br><strong>Agent A</strong><br>歴史・起源
+        </div>
+        <div style="background:#fff;border:1px solid var(--blue);border-radius:6px;padding:5px 3px;text-align:center;font-size:.68rem;line-height:1.4">
+          🤖<br><strong>Agent B</strong><br>栄養・塩分
+        </div>
+        <div style="background:#fff;border:1px solid var(--blue);border-radius:6px;padding:5px 3px;text-align:center;font-size:.68rem;line-height:1.4">
+          🤖<br><strong>Agent C</strong><br>種類・地域差
+        </div>
+      </div>
+      <div class="f-sub">同時起動・同時調査</div>
       <div style="font-size:.7rem;color:var(--blue);margin-top:6px;font-family:monospace">workflow/research.md</div>
     </div>
     <div class="flow-arrow">→</div>
