@@ -520,6 +520,7 @@ audio{width:420px;margin:4px 0 14px;accent-color:var(--green)}
   <button class="btn" id="next" onclick="go(1)">次へ ▶</button>
   <button class="btn" id="narr-btn" onclick="toggleNarration()" style="margin-left:16px;border-color:var(--muted);color:var(--muted)">🔇 読み上げOFF</button>
   <button class="btn" id="replay-btn" onclick="speak(cur)" style="border-color:var(--muted);color:var(--muted)">↺ 再生</button>
+  <button class="btn" id="auto-btn" onclick="toggleAutoAdvance()" style="border-color:var(--muted);color:var(--muted)">⏭ 自動進行OFF</button>
 </div>
 
 <script>
@@ -527,6 +528,7 @@ const slides = document.querySelectorAll('.sl');
 const total = slides.length;
 let cur = 0;
 let narrationOn = false;
+let autoAdvance = false;
 
 /* ── ナレーション原稿 ── */
 const narration = [
@@ -607,6 +609,7 @@ function speak(index) {
   utter.lang = 'ja-JP';
   utter.rate = 0.95;
   utter.pitch = 1.0;
+  utter.onend = () => { if (autoAdvance && cur < total - 1) go(1); };
   window.speechSynthesis.speak(utter);
 }
 
@@ -623,6 +626,20 @@ function toggleNarration() {
     btn.style.borderColor = 'var(--muted)';
     btn.style.color = 'var(--muted)';
     window.speechSynthesis.cancel();
+  }
+}
+
+function toggleAutoAdvance() {
+  autoAdvance = !autoAdvance;
+  const btn = document.getElementById('auto-btn');
+  if (autoAdvance) {
+    btn.textContent = '⏭ 自動進行ON';
+    btn.style.borderColor = 'var(--orange)';
+    btn.style.color = 'var(--orange)';
+  } else {
+    btn.textContent = '⏭ 自動進行OFF';
+    btn.style.borderColor = 'var(--muted)';
+    btn.style.color = 'var(--muted)';
   }
 }
 
