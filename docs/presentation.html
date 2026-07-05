@@ -159,7 +159,7 @@ audio{width:420px;margin:4px 0 14px;accent-color:var(--green)}
   <div class="sec-title" style="margin-bottom:28px">まず、<span class="hlite">聴いてみてください</span></div>
   <div class="demo-player-wrap">
     <div class="demo-ep-label">ケンとハナの食卓バトル「ラーメンって結局体にいいの？悪いの？」</div>
-    <audio controls>
+    <audio id="demo-audio" controls>
       <source src="../scripts/20260705_ep009_ラーメン体にいいの悪いの.wav" type="audio/wav">
       お使いのブラウザは audio タグに対応していません
     </audio>
@@ -651,6 +651,17 @@ function updateUI() {
   document.getElementById('prog').style.width = ((cur+1)/total*100) + '%';
 }
 
+function handleDemoAudio(index) {
+  const audio = document.getElementById('demo-audio');
+  if (!audio) return;
+  if (index === 1) {
+    audio.playbackRate = 2.0;
+    audio.play();
+  } else {
+    audio.pause();
+  }
+}
+
 function go(dir) {
   const next = cur + dir;
   if (next < 0 || next >= total) return;
@@ -659,6 +670,7 @@ function go(dir) {
   slides[cur].classList.add('on');
   updateUI();
   speak(cur);
+  handleDemoAudio(cur);
 }
 
 document.addEventListener('keydown', e => {
