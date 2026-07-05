@@ -15,6 +15,8 @@
   --blu-bg:#EBF5FB;
   --orange:#D35400;
   --org-bg:#FEF5E4;
+  --purple:#6B3FA0;
+  --pur-bg:#F3EEF9;
   --muted:#777;
   --border:#E8E3DC;
 }
@@ -41,7 +43,7 @@ body{
 .btn{padding:8px 28px;border-radius:6px;border:2px solid var(--text);background:transparent;color:var(--text);font-size:13px;font-weight:700;cursor:pointer;transition:all .2s}
 .btn:hover:not(:disabled){background:var(--text);color:#fff}
 .btn:disabled{opacity:.3;cursor:default}
-#cnt{font-size:13px;color:var(--muted);min-width:56px;text-align:center}
+#cnt{font-size:13px;color:var(--muted);min-width:66px;text-align:center}
 
 /* 共通 */
 .tag{position:absolute;top:14px;left:24px;font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase}
@@ -50,6 +52,7 @@ body{
 .left-g{border-left:5px solid var(--green);padding:12px 18px;background:var(--grn-bg);border-radius:0 8px 8px 0;font-size:.95rem;line-height:1.6}
 .left-b{border-left:5px solid var(--blue);padding:12px 18px;background:var(--blu-bg);border-radius:0 8px 8px 0;font-size:.95rem;line-height:1.6}
 .left-o{border-left:5px solid var(--orange);padding:12px 18px;background:var(--org-bg);border-radius:0 8px 8px 0;font-size:.95rem;line-height:1.6}
+.left-p{border-left:5px solid var(--purple);padding:12px 18px;background:var(--pur-bg);border-radius:0 8px 8px 0;font-size:.95rem;line-height:1.6}
 .pulse{animation:pulse 2.2s ease-in-out infinite}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
 
@@ -124,6 +127,18 @@ body{
 .ru-title::after{content:'';display:block;width:36px;height:3px;background:var(--green);margin:8px auto 0;border-radius:2px}
 .ru-body{font-size:.9rem;color:#555;line-height:1.6}
 .final{text-align:center;font-size:1rem;color:#444;border-top:2px solid var(--border);padding-top:16px;max-width:740px;line-height:1.7}
+
+/* デモスライド */
+.demo-player-wrap{background:#fff;border:2px solid var(--border);border-radius:20px;padding:36px 56px;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,.07)}
+.demo-ep-label{font-size:.9rem;color:var(--muted);margin-bottom:14px;font-weight:700;letter-spacing:.5px}
+audio{width:420px;margin:4px 0 14px;accent-color:var(--green)}
+.demo-badge{display:inline-flex;gap:20px;font-size:.8rem;color:var(--muted)}
+.demo-badge span{background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:4px 14px}
+
+/* スーパーパワーズスライド */
+.sp-flow{display:flex;align-items:center;gap:6px;background:var(--pur-bg);border:1px solid var(--purple);border-radius:10px;padding:12px 16px;margin:12px 0}
+.sp-step{background:#fff;border:1.5px solid var(--purple);border-radius:8px;padding:8px 14px;font-size:.82rem;font-weight:700;color:var(--purple);text-align:center;white-space:nowrap}
+.sp-arrow{color:var(--purple);font-size:1.1rem;flex-shrink:0}
 </style>
 </head>
 <body>
@@ -138,8 +153,29 @@ body{
   <div class="s1-note">ツール：Claude Code　／　音声合成：VOICEVOX　／　バックアップ：GitHub</div>
 </div>
 
-<!-- ===== 2 システム概要 ===== -->
+<!-- ===== 2 デモ ===== -->
 <div class="sl" data-i="1">
+  <div class="tag">DEMO — ep009 ラーメン回</div>
+  <div class="sec-title" style="margin-bottom:28px">まず、<span class="hlite">聴いてみてください</span></div>
+  <div class="demo-player-wrap">
+    <div class="demo-ep-label">ケンとハナの食卓バトル「ラーメンって結局体にいいの？悪いの？」</div>
+    <audio controls>
+      <source src="../scripts/20260705_ep009_ラーメン体にいいの悪いの.wav" type="audio/wav">
+      お使いのブラウザは audio タグに対応していません
+    </audio>
+    <div class="demo-badge">
+      <span>🤖 全工程 Claude Code が自動生成</span>
+      <span>🔊 音声：VOICEVOX</span>
+      <span>⏱ 約8分</span>
+    </div>
+  </div>
+  <div class="left-g" style="max-width:700px;margin-top:24px">
+    ✅ このラジオは「ラーメンの回を作って」という<strong>1行の指示だけ</strong>で作られました。
+  </div>
+</div>
+
+<!-- ===== 3 システム概要 ===== -->
+<div class="sl" data-i="2">
   <div class="tag">OVERVIEW</div>
   <div class="sec-title">何ができるか</div>
   <div class="io-grid">
@@ -161,8 +197,8 @@ body{
   </div>
 </div>
 
-<!-- ===== 3 ブレインストーミング ===== -->
-<div class="sl" data-i="2">
+<!-- ===== 4 ブレインストーミング ===== -->
+<div class="sl" data-i="3">
   <div class="tag">BRAINSTORMING WITH AI</div>
   <div class="sec-title">番組コンセプトも<span class="hlite">AIと対話</span>して設計した</div>
   <div class="qa-wrap">
@@ -197,8 +233,50 @@ body{
   </div>
 </div>
 
-<!-- ===== 4 キャラクター ===== -->
-<div class="sl" data-i="3">
+<!-- ===== 5 スーパーパワーズ ===== -->
+<div class="sl" data-i="4">
+  <div class="tag">TOOL — Superpowers</div>
+  <div class="sec-title" style="margin-bottom:16px">設計を加速する<span class="hlite" style="background:linear-gradient(transparent 52%,rgba(180,120,255,.35) 48%)">Superpowers</span>スキル</div>
+  <div class="tech-2col" style="margin-bottom:14px">
+    <div class="tech-panel" style="border-color:var(--purple)">
+      <div class="tech-panel-title" style="color:var(--purple)"><span class="tech-panel-em">🔌</span>Superpowers とは</div>
+      <p style="font-size:.88rem;line-height:1.7;color:#444;margin-bottom:12px">
+        Claude Code に追加できる<strong>スキルプラグイン</strong>のフレームワーク。<br>
+        複雑なワークフローを再利用可能な「スキル」として定義し、呼び出すだけで専門的な手順を実行する。
+      </p>
+      <div class="tech-step"><div class="tech-step-num" style="background:var(--purple)">1</div><span><strong>brainstorming</strong>スキル：Q&amp;A対話で要件を整理し、設計案を提示・承認後に設計書を自動生成する</span></div>
+      <div class="tech-step"><div class="tech-step-num" style="background:var(--purple)">2</div><span>設計書は <code style="background:#f0f0f0;padding:1px 5px;border-radius:3px;font-size:.8rem">docs/superpowers/specs/</code> へ自動保存・git commit</span></div>
+      <div class="tech-step"><div class="tech-step-num" style="background:var(--purple)">3</div><span>他にも <strong>code-review</strong>・<strong>writing-plans</strong> など多数のスキルが利用可能</span></div>
+    </div>
+    <div class="tech-panel">
+      <div class="tech-panel-title"><span class="tech-panel-em">🎙️</span>今回の使いかた</div>
+      <div class="sp-flow">
+        <div class="sp-step">Q&amp;A 対話</div>
+        <div class="sp-arrow">→</div>
+        <div class="sp-step">設計案を提示</div>
+        <div class="sp-arrow">→</div>
+        <div class="sp-step">承認</div>
+        <div class="sp-arrow">→</div>
+        <div class="sp-step">設計書を保存</div>
+      </div>
+      <div style="font-size:.82rem;color:#444;line-height:1.7;margin-top:8px">
+        <strong>使ったスキル：</strong><code style="background:#f0f0f0;padding:1px 5px;border-radius:3px">superpowers:brainstorming</code><br>
+        <strong>生成された設計書：</strong><br>
+        <span style="font-family:monospace;font-size:.75rem;color:var(--purple)">docs/superpowers/specs/<br>2026-07-04-company-presentation-radio-design.md</span>
+      </div>
+      <div style="margin-top:12px;font-size:.82rem;color:#444;line-height:1.7">
+        <strong>workflow/ フォルダも同じ発想：</strong><br>
+        research.md・scriptwriting.md など、このプロジェクト専用の「ミニスキル定義」として機能している。
+      </div>
+    </div>
+  </div>
+  <div class="left-p" style="max-width:960px">
+    💡 「どう作るか」をスキルに任せることで、AIへの指示は<strong>「何を作るか」だけ</strong>に集中できる。
+  </div>
+</div>
+
+<!-- ===== 6 キャラクター ===== -->
+<div class="sl" data-i="5">
   <div class="tag">DEMO — ケンとハナの食卓バトル</div>
   <div class="sec-title">番組キャラクター</div>
   <div class="char-grid">
@@ -233,8 +311,8 @@ body{
   </div>
 </div>
 
-<!-- ===== 5 台本サンプル ===== -->
-<div class="sl" data-i="4">
+<!-- ===== 7 台本サンプル ===== -->
+<div class="sl" data-i="6">
   <div class="tag">SCRIPT SAMPLE — ラーメン回</div>
   <div class="sec-title">AIが生成した台本サンプル</div>
   <div class="script-wrap">
@@ -278,8 +356,8 @@ body{
   </div>
 </div>
 
-<!-- ===== 6 制作フロー ===== -->
-<div class="sl" data-i="5">
+<!-- ===== 8 制作フロー ===== -->
+<div class="sl" data-i="7">
   <div class="tag">WORKFLOW</div>
   <div class="sec-title">制作フロー（<span style="color:var(--green)">全自動</span>）</div>
   <div class="flow-wrap">
@@ -340,8 +418,8 @@ body{
   </div>
 </div>
 
-<!-- ===== 7 VOICEVOX連携 ===== -->
-<div class="sl" data-i="6">
+<!-- ===== 9 VOICEVOX連携 ===== -->
+<div class="sl" data-i="8">
   <div class="tag">TECH — VOICEVOX連携</div>
   <div class="sec-title">音声生成の仕組み</div>
   <div class="tech-2col">
@@ -376,8 +454,8 @@ body{
   </div>
 </div>
 
-<!-- ===== 8 GitHub連携 ===== -->
-<div class="sl" data-i="7">
+<!-- ===== 10 GitHub連携 ===== -->
+<div class="sl" data-i="9">
   <div class="tag">TECH — GitHub連携</div>
   <div class="sec-title">自動バックアップの仕組み</div>
   <div class="tech-2col" style="margin-bottom:16px">
@@ -408,8 +486,8 @@ body{
   </div>
 </div>
 
-<!-- ===== 9 まとめ ===== -->
-<div class="sl" data-i="8">
+<!-- ===== 11 まとめ ===== -->
+<div class="sl" data-i="10">
   <div class="tag">まとめ</div>
   <div class="sec-title">今日からできること</div>
   <div class="ru3">
@@ -438,7 +516,7 @@ body{
 </div>
 <div id="nav">
   <button class="btn" id="prev" onclick="go(-1)" disabled>◀ 前へ</button>
-  <div id="cnt">1 / 9</div>
+  <div id="cnt">1 / 11</div>
   <button class="btn" id="next" onclick="go(1)">次へ ▶</button>
   <button class="btn" id="narr-btn" onclick="toggleNarration()" style="margin-left:16px;border-color:var(--muted);color:var(--muted)">🔇 読み上げOFF</button>
   <button class="btn" id="replay-btn" onclick="speak(cur)" style="border-color:var(--muted);color:var(--muted)">↺ 再生</button>
@@ -456,52 +534,62 @@ const narration = [
   `このシステムは、テーマを渡すだけでラジオ番組の台本と音声ファイルを全自動で生成します。
 ツールはClaude Code、音声合成にはVOICEVOX、バックアップにはGitHubを使っています。`,
 
-  /* 1: 概要 */
+  /* 1: デモ */
+  `まず、実際に作ったラジオ番組を聴いてみてください。
+「ラーメンって結局体にいいの？悪いの？」というタイトルで、ケンとハナというキャラクターが掛け合います。
+再生ボタンを押してください。`,
+
+  /* 2: 概要 */
   `インプットはテキスト1行だけです。たとえば「ラーメンの回を作って」と渡すと、
 AIがウェブで情報を調査して台本を書き、音声ファイルに変換し、GitHubへ自動バックアップするまでをすべて行います。
 途中で人間が介入する必要はありません。`,
 
-  /* 2: ブレインストーミング */
+  /* 3: ブレインストーミング */
   `今回の番組コンセプト自体も、AIとの対話を通じてゼロから設計しました。
 目的・テーマ・キャラクター・番組名まで、Q&A形式で決めていき、
 試作台本を作ってフィードバックするまでを1回のセッションで完了しています。
 コード生成だけでなく、企画や設計の段階からAIと一緒に進められます。`,
 
-  /* 3: キャラクター */
+  /* 4: スーパーパワーズ */
+  `このQ&A対話を実現したのが「Superpowers」というスキルプラグインのフレームワークです。
+Claude Codeに追加できるスキルを定義することで、複雑なワークフローを再利用可能なコマンドとして使えるようになります。
+今回はbrainstormingスキルを使い、Q&Aで要件を整理し、設計案を提示・承認後に設計書を自動生成しました。
+workflowフォルダのファイルも、このプロジェクト専用のミニスキル定義として機能しています。`,
+
+  /* 5: キャラクター */
   `今回のデモ番組は「ケンとハナの食卓バトル」です。
 ケンは食いしん坊の直感派で、とにかく食べることが優先。
 ハナは論文が友達のデータ派で、栄養・歴史・科学でズバッと諭します。
 毎回1つの料理をテーマに、この2人が雑談しながら深掘りするスタイルです。`,
 
-  /* 4: 台本サンプル */
+  /* 6: 台本サンプル */
   `これはラーメン回のサンプルです。
 ケンが「今日ラーメン食べてきた」という話から始まり、
 ハナが塩分データで「1杯で推奨量オーバー」と反撃します。
 最後はハナがまとめて、ケンがオチをつける構成です。
 このやりとりはすべてAIが自動生成しました。`,
 
-  /* 5: 制作フロー */
+  /* 7: 制作フロー */
   `フローはテーマ入力から始まり、リサーチ・台本生成・チェック・音声変換・バックアップまで一直線に進みます。
 各工程はworkflowフォルダのマークダウンファイルで定義されています。research、scriptwriting、review、audio、publishの5つです。
 リサーチ工程では「栄養」「歴史」「文化」の担当を別々のAIに同時に割り当てる並列処理を採用しています。
 1つずつ順番にやるより大幅に速く、品質も向上します。`,
 
-  /* 6: VOICEVOX */
+  /* 8: VOICEVOX */
   `音声生成はPythonスクリプトのtts.pyが担当します。
 台本のマークダウンファイルからセリフを抽出し、VOICEVOXのHTTP APIを2回叩いて音声データを取得します。
 1回目で音声クエリを生成し、2回目でWAVデータを合成する仕組みです。
-VOICEVOXが起動していない場合は自動で起動して待機するため、手動での起動作業は不要です。
-ケンとハナでスピーカーIDを切り替えることで、2人の声を使い分けています。`,
+VOICEVOXが起動していない場合は自動で起動して待機するため、手動での起動作業は不要です。`,
 
-  /* 7: GitHub */
+  /* 9: GitHub */
   `GitHubはバックアップとして使っています。
 エピソードごとに台本・音声・調査メモをセットで保存することで、過去のエピソードをいつでも参照できます。
 重要なポイントは、git add ドットを使わないことです。
 パス指定で対象ファイルだけをコミットするルールをClaude Codeにあらかじめ定義しておくことで、
 設定ファイルや他のエピソードが誤って混入するのを防いでいます。
-また、GitHubへの接続認証情報はWindowsの資格情報マネージャーで管理しています。gh auth loginで一度認証するだけで、以降のpushは自動で通ります。`,
+GitHub認証はWindowsの資格情報マネージャーで管理しており、一度設定すれば以降のpushは自動で通ります。`,
 
-  /* 8: まとめ */
+  /* 10: まとめ */
   `まとめです。
 このシステムのポイントは3つです。
 まず、テーマを渡すだけで調査・台本・音声・バックアップまで全工程が自動で完了します。
