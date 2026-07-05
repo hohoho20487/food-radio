@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIラジオ自動制作システム</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#FAF8F4;
+  --text:#1C1C2E;
+  --green:#1A7A4E;
+  --grn-bg:#EBF8F1;
+  --blue:#1A5276;
+  --blu-bg:#EBF5FB;
+  --orange:#D35400;
+  --org-bg:#FEF5E4;
+  --muted:#777;
+  --border:#E8E3DC;
+}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Hiragino Sans','Meiryo','Yu Gothic UI',sans-serif;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+#prog{position:fixed;top:0;left:0;height:5px;background:linear-gradient(90deg,var(--green),var(--blue));transition:width .4s ease;z-index:100}
+#wrap{flex:1;position:relative;overflow:hidden}
+.sl{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:52px 72px 24px;
+  opacity:0;transition:opacity .38s ease;
+  pointer-events:none;
+}
+.sl.on{opacity:1;pointer-events:all}
+#nav{display:flex;align-items:center;justify-content:center;gap:24px;padding:12px;background:#fff;border-top:2px solid var(--border)}
+.btn{padding:8px 28px;border-radius:6px;border:2px solid var(--text);background:transparent;color:var(--text);font-size:13px;font-weight:700;cursor:pointer;transition:all .2s}
+.btn:hover:not(:disabled){background:var(--text);color:#fff}
+.btn:disabled{opacity:.3;cursor:default}
+#cnt{font-size:13px;color:var(--muted);min-width:56px;text-align:center}
+
+/* 共通 */
+.tag{position:absolute;top:14px;left:24px;font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase}
+.sec-title{font-size:2.2rem;font-weight:900;text-align:center;line-height:1.3;margin-bottom:22px}
+.hlite{background:linear-gradient(transparent 52%,rgba(100,220,140,.5) 48%);padding:0 3px}
+.left-g{border-left:5px solid var(--green);padding:12px 18px;background:var(--grn-bg);border-radius:0 8px 8px 0;font-size:.95rem;line-height:1.6}
+.left-b{border-left:5px solid var(--blue);padding:12px 18px;background:var(--blu-bg);border-radius:0 8px 8px 0;font-size:.95rem;line-height:1.6}
+.left-o{border-left:5px solid var(--orange);padding:12px 18px;background:var(--org-bg);border-radius:0 8px 8px 0;font-size:.95rem;line-height:1.6}
+.pulse{animation:pulse 2.2s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+
+/* タイトル */
+.s1-icon{font-size:5rem;display:block;text-align:center;margin-bottom:16px}
+.s1-main{font-size:3rem;font-weight:900;text-align:center;line-height:1.25;margin-bottom:14px}
+.s1-sub{font-size:1.25rem;color:var(--green);font-weight:700;text-align:center;margin-bottom:18px}
+.s1-note{font-size:1rem;color:var(--muted);border-bottom:2px dashed #ccc;padding-bottom:4px;text-align:center}
+
+/* 概要 */
+.io-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;width:100%;max-width:900px}
+.io-box{background:#fff;border:2px solid var(--border);border-radius:12px;padding:24px 28px}
+.io-title{font-size:1rem;font-weight:900;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.io-em{font-size:1.6rem}
+.io-code{background:#1C1C2E;color:#3fb950;font-family:monospace;font-size:.95rem;padding:14px 18px;border-radius:8px;margin-top:8px;line-height:1.7}
+.io-item{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:.95rem}
+
+/* ブレインストーミング */
+.qa-wrap{width:100%;max-width:880px;display:flex;flex-direction:column;gap:10px}
+.qa-row{display:flex;align-items:flex-start;gap:14px;background:#fff;border:1px solid var(--border);border-radius:8px;padding:12px 16px}
+.qa-num{background:var(--blue);color:#fff;font-size:.78rem;font-weight:700;padding:3px 10px;border-radius:12px;white-space:nowrap;margin-top:2px;flex-shrink:0}
+.qa-q{font-size:.93rem;font-weight:700;flex:1}
+.qa-a{font-size:.9rem;color:var(--green);font-weight:700;flex:1;border-left:2px solid var(--border);padding-left:12px}
+
+/* キャラ */
+.char-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;width:100%;max-width:900px}
+.char-box{background:#fff;border:2px solid var(--border);border-radius:12px;padding:26px 28px}
+.char-name{font-size:2rem;font-weight:900;margin-bottom:4px}
+.char-role-tag{display:inline-block;font-size:.8rem;font-weight:700;padding:3px 12px;border-radius:20px;margin-bottom:14px}
+.char-desc{font-size:.92rem;color:#444;line-height:1.7;margin-bottom:14px}
+.char-quote{background:var(--bg);border-radius:8px;padding:12px 14px;font-size:.85rem;line-height:1.9;border:1px solid var(--border)}
+.char-quote-label{font-size:.75rem;font-weight:700;color:var(--muted);margin-bottom:6px}
+
+/* 台本 */
+.script-wrap{width:100%;max-width:860px;background:#fff;border:2px solid var(--border);border-radius:12px;padding:28px 32px}
+.script-line{display:flex;gap:10px;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--border);font-size:.95rem;line-height:1.6}
+.script-line:last-child{border-bottom:none}
+.script-speaker{font-weight:900;white-space:nowrap;flex-shrink:0;width:48px}
+.script-text{color:#333}
+.divider-line{border:none;border-top:2px dashed var(--border);margin:12px 0}
+
+/* フロー */
+.flow-wrap{display:flex;align-items:stretch;width:100%;max-width:960px;gap:0;margin-bottom:20px}
+.flow-step{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:18px 10px;background:#fff;border:2px solid var(--border);border-radius:10px;margin:0 5px;font-size:.85rem;line-height:1.4}
+.flow-step .f-em{font-size:2rem;margin-bottom:8px}
+.flow-step .f-name{font-weight:700;margin-bottom:4px;font-size:.9rem}
+.flow-step .f-sub{font-size:.75rem;color:var(--muted)}
+.flow-arrow{display:flex;align-items:center;color:var(--border);font-size:1.4rem;flex-shrink:0;margin:0 -2px}
+
+/* コードブロック */
+.code-block{background:#1C1C2E;border-radius:10px;padding:20px 24px;font-family:monospace;font-size:.88rem;line-height:1.9;width:100%;max-width:900px}
+.code-comment{color:#6e7681}
+.code-cmd{color:#3fb950}
+.code-str{color:#a5d6ff}
+.code-kw{color:#ff7b72}
+.code-fn{color:#d2a8ff}
+.code-url{color:#ffa657}
+
+/* 技術2カラム */
+.tech-2col{display:grid;grid-template-columns:1fr 1fr;gap:24px;width:100%;max-width:960px;margin-bottom:18px}
+.tech-panel{background:#fff;border:2px solid var(--border);border-radius:12px;padding:22px 24px}
+.tech-panel-title{font-size:1rem;font-weight:900;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.tech-panel-em{font-size:1.4rem}
+.tech-step{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:.88rem;line-height:1.5}
+.tech-step-num{background:var(--blue);color:#fff;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0;margin-top:1px}
+
+/* まとめ */
+.ru3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;width:100%;max-width:900px;margin-bottom:20px}
+.ru-item{text-align:center;padding:18px 14px}
+.ru-num{font-size:4rem;font-weight:900;color:var(--green);opacity:.15;line-height:1;margin-bottom:-14px}
+.ru-title{font-size:1.5rem;font-weight:900;margin-bottom:8px}
+.ru-title::after{content:'';display:block;width:36px;height:3px;background:var(--green);margin:8px auto 0;border-radius:2px}
+.ru-body{font-size:.9rem;color:#555;line-height:1.6}
+.final{text-align:center;font-size:1rem;color:#444;border-top:2px solid var(--border);padding-top:16px;max-width:740px;line-height:1.7}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<div id="wrap">
+
+<!-- ===== 1 タイトル ===== -->
+<div class="sl on" data-i="0">
+  <span class="s1-icon pulse">🎙️</span>
+  <div class="s1-main">AIラジオ<span style="color:var(--green)">自動制作</span>システム</div>
+  <div class="s1-sub">テーマを渡すだけで、台本・音声ファイルまで全自動で生成する</div>
+  <div class="s1-note">ツール：Claude Code　／　音声合成：VOICEVOX　／　バックアップ：GitHub</div>
+</div>
+
+<!-- ===== 2 システム概要 ===== -->
+<div class="sl" data-i="1">
+  <div class="tag">OVERVIEW</div>
+  <div class="sec-title">何ができるか</div>
+  <div class="io-grid">
+    <div class="io-box">
+      <div class="io-title"><span class="io-em">💬</span>INPUT — 人間がやること</div>
+      <p style="font-size:.9rem;color:var(--muted);margin-bottom:10px">テーマを1行渡すだけ</p>
+      <div class="io-code">$ claude "ラーメンの回を作って"</div>
+    </div>
+    <div class="io-box">
+      <div class="io-title"><span class="io-em">🤖</span>OUTPUT — AIが全部作る</div>
+      <div class="io-item">📄 <span>台本 .md ファイル（論文・文献ベース）</span></div>
+      <div class="io-item">🔊 <span>音声 .wav ファイル（VOICEVOX）</span></div>
+      <div class="io-item">📚 <span>リサーチナレッジ .md（調査メモ）</span></div>
+      <div class="io-item">💾 <span>GitHub へ自動バックアップ</span></div>
+    </div>
+  </div>
+  <div class="left-g" style="max-width:900px;margin-top:4px">
+    ✅ 途中で人間が介入しない。承認待ちなし。調査・執筆・音声変換・保存まで Claude Code が一気に実行する。
+  </div>
+</div>
+
+<!-- ===== 3 ブレインストーミング ===== -->
+<div class="sl" data-i="2">
+  <div class="tag">BRAINSTORMING WITH AI</div>
+  <div class="sec-title">番組コンセプトも<span class="hlite">AIと対話</span>して設計した</div>
+  <div class="qa-wrap">
+    <div class="qa-row">
+      <div class="qa-num">Q1</div>
+      <div class="qa-q">番組の目的は？</div>
+      <div class="qa-a">技術デモ ＋ Claude Code のプロセス紹介</div>
+    </div>
+    <div class="qa-row">
+      <div class="qa-num">Q2</div>
+      <div class="qa-q">どんな番組にしたいか？</div>
+      <div class="qa-a">調査しやすく、誰でも楽しめる料理テーマの雑談ラジオ</div>
+    </div>
+    <div class="qa-row">
+      <div class="qa-num">Q3</div>
+      <div class="qa-q">キャラクターの設定は？</div>
+      <div class="qa-a">食いしん坊な男性 × データで諭す女性の友人コンビ</div>
+    </div>
+    <div class="qa-row">
+      <div class="qa-num">Q4</div>
+      <div class="qa-q">番組名・トーンは？</div>
+      <div class="qa-a">掛け合い感が出る名前・軽快な口論スタイル</div>
+    </div>
+    <div class="qa-row">
+      <div class="qa-num">試作</div>
+      <div class="qa-q">ラーメン回の台本ドラフトを作成・フィードバック</div>
+      <div class="qa-a">エンディングを修正して承認 ✅</div>
+    </div>
+  </div>
+  <div class="left-o" style="max-width:880px;margin-top:4px">
+    💡 コンセプト設計・台本の試作・フィードバックによる修正まで、すべてこの会話の中で完結した。
+  </div>
+</div>
+
+<!-- ===== 4 キャラクター ===== -->
+<div class="sl" data-i="3">
+  <div class="tag">DEMO — ケンとハナの食卓バトル</div>
+  <div class="sec-title">番組キャラクター</div>
+  <div class="char-grid">
+    <div class="char-box" style="border-color:#27AE60">
+      <div class="char-name" style="color:var(--green)">ケン（男性）</div>
+      <div class="char-role-tag" style="background:var(--grn-bg);color:var(--green);">食いしん坊・直感派</div>
+      <div class="char-desc">
+        食欲優先。とにかく食べたい。<br>
+        ハナに論文で言い負かされても食べることは止めない。
+      </div>
+      <div class="char-quote">
+        <div class="char-quote-label">口癖</div>
+        「うまければそれでよくない？」<br>
+        「細かいこと気にしすぎ」<br>
+        「でも食べてから考える」
+      </div>
+    </div>
+    <div class="char-box" style="border-color:#1A5276">
+      <div class="char-name" style="color:var(--blue)">ハナ（女性）</div>
+      <div class="char-role-tag" style="background:var(--blu-bg);color:var(--blue);">栄養オタク・データ派</div>
+      <div class="char-desc">
+        論文が友達。栄養・歴史・科学でズバッと諭す。<br>
+        ケンを呆れながらも最後は笑って終わる。
+      </div>
+      <div class="char-quote">
+        <div class="char-quote-label">口癖</div>
+        「それ、ちゃんとデータある？」<br>
+        「食べる前に聞いて」<br>
+        「聞いてないじゃん！」
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 5 台本サンプル ===== -->
+<div class="sl" data-i="4">
+  <div class="tag">SCRIPT SAMPLE — ラーメン回</div>
+  <div class="sec-title">AIが生成した台本サンプル</div>
+  <div class="script-wrap">
+    <div class="script-line">
+      <div class="script-speaker" style="color:var(--green)">ケン</div>
+      <div class="script-text">「ハナ、俺今日ラーメン食べてきたんだけど、最高だった」</div>
+    </div>
+    <div class="script-line">
+      <div class="script-speaker" style="color:var(--blue)">ハナ</div>
+      <div class="script-text">「…で？私に何を報告したいの？」</div>
+    </div>
+    <div class="script-line">
+      <div class="script-speaker" style="color:var(--green)">ケン</div>
+      <div class="script-text">「1杯の塩分ってどれくらいなの？」</div>
+    </div>
+    <div class="script-line">
+      <div class="script-speaker" style="color:var(--blue)">ハナ</div>
+      <div class="script-text">「平均6〜8グラム。WHOの1日推奨量が5グラムだから、1杯で余裕でオーバー」</div>
+    </div>
+    <div class="script-line">
+      <div class="script-speaker" style="color:var(--green)">ケン</div>
+      <div class="script-text">「えっ、じゃあ俺さっきすでに終わってる？」</div>
+    </div>
+    <div class="script-line">
+      <div class="script-speaker" style="color:var(--blue)">ハナ</div>
+      <div class="script-text">「終わってる（即答）」</div>
+    </div>
+    <hr class="divider-line">
+    <div class="script-line">
+      <div class="script-speaker" style="color:var(--blue)">ハナ</div>
+      <div class="script-text">「まあ、食べ過ぎなければ、ね」</div>
+    </div>
+    <div class="script-line">
+      <div class="script-speaker" style="color:var(--green)">ケン</div>
+      <div class="script-text">「…ラーメン食べてから考える」</div>
+    </div>
+    <div class="script-line">
+      <div class="script-speaker" style="color:var(--blue)">ハナ</div>
+      <div class="script-text">「聞いてないじゃん！」</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 6 制作フロー ===== -->
+<div class="sl" data-i="5">
+  <div class="tag">WORKFLOW</div>
+  <div class="sec-title">制作フロー（<span style="color:var(--green)">全自動</span>）</div>
+  <div class="flow-wrap">
+    <div class="flow-step">
+      <div class="f-em">💬</div>
+      <div class="f-name">テーマ入力</div>
+      <div class="f-sub">人間がやるのはこれだけ</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="f-em">🔍</div>
+      <div class="f-name">並列リサーチ</div>
+      <div class="f-sub">複数AIが観点を分けて同時調査</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="f-em">📝</div>
+      <div class="f-name">台本生成</div>
+      <div class="f-sub">キャラ設定に従い自動生成</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="f-em">✅</div>
+      <div class="f-name">自動チェック</div>
+      <div class="f-sub">基準を満たすまで自動修正</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="f-em">🔊</div>
+      <div class="f-name">音声生成</div>
+      <div class="f-sub">VOICEVOX で音声変換</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="f-em">💾</div>
+      <div class="f-name">GitHub バックアップ</div>
+      <div class="f-sub">台本・音声・調査メモを保存</div>
+    </div>
+  </div>
+  <div class="left-o" style="max-width:960px">
+    💡 <strong>並列リサーチの仕組み：</strong>「栄養」「歴史」「文化」の担当を別々のサブエージェントに同時割り当て。終わったら結果を集約してナレッジファイルに保存する。
+  </div>
+</div>
+
+<!-- ===== 7 VOICEVOX連携 ===== -->
+<div class="sl" data-i="6">
+  <div class="tag">TECH — VOICEVOX連携</div>
+  <div class="sec-title">音声生成の仕組み</div>
+  <div class="tech-2col">
+    <div class="tech-panel">
+      <div class="tech-panel-title"><span class="tech-panel-em">⚙️</span>tts.py の処理フロー</div>
+      <div class="tech-step"><div class="tech-step-num">1</div><span>台本 .md を読み込み、<code style="background:#f0f0f0;padding:1px 5px;border-radius:3px">キャラ名：「セリフ」</code> の行をすべて抽出</span></div>
+      <div class="tech-step"><div class="tech-step-num">2</div><span>VOICEVOXが起動していなければ <strong>exe を自動起動</strong>し、APIが応答するまで待機</span></div>
+      <div class="tech-step"><div class="tech-step-num">3</div><span>セリフごとに <strong>HTTP POSTで2回リクエスト</strong>（音声クエリ生成 → 音声合成）</span></div>
+      <div class="tech-step"><div class="tech-step-num">4</div><span>全セリフの WAV をメモリ上で結合して1ファイルに書き出す</span></div>
+    </div>
+    <div class="tech-panel">
+      <div class="tech-panel-title"><span class="tech-panel-em">💻</span>APIの呼び出しコード</div>
+      <div class="code-block" style="font-size:.78rem;padding:14px 16px;">
+        <span class="code-comment"># ① 音声クエリを生成</span><br>
+        query = requests.<span class="code-fn">post</span>(<br>
+        &nbsp;&nbsp;<span class="code-str">"http://localhost:50021/audio_query"</span>,<br>
+        &nbsp;&nbsp;params={<span class="code-str">"text"</span>: text, <span class="code-str">"speaker"</span>: <span class="code-url">82</span>}<br>
+        )<br><br>
+        <span class="code-comment"># ② WAVデータを合成</span><br>
+        synthesis = requests.<span class="code-fn">post</span>(<br>
+        &nbsp;&nbsp;<span class="code-str">"http://localhost:50021/synthesis"</span>,<br>
+        &nbsp;&nbsp;params={<span class="code-str">"speaker"</span>: <span class="code-url">82</span>},<br>
+        &nbsp;&nbsp;json=query.<span class="code-fn">json</span>()<br>
+        )<br>
+        <span class="code-comment"># speaker ID で声を切り替え</span><br>
+        <span class="code-comment"># ケン: 82 / ハナ: 65</span>
+      </div>
+    </div>
+  </div>
+  <div class="left-g" style="max-width:960px">
+    ✅ Claude Code が <code style="background:#d4edda;padding:1px 6px;border-radius:3px">python tts.py 台本.md</code> を実行するだけ。VOICEVOX の起動・音声生成・ファイル保存まで Python スクリプトが全部やる。
+  </div>
+</div>
+
+<!-- ===== 8 GitHub連携 ===== -->
+<div class="sl" data-i="7">
+  <div class="tag">TECH — GitHub連携</div>
+  <div class="sec-title">自動バックアップの仕組み</div>
+  <div class="tech-2col" style="margin-bottom:16px">
+    <div class="tech-panel">
+      <div class="tech-panel-title"><span class="tech-panel-em">💾</span>GitHub をバックアップに使う理由</div>
+      <div class="tech-step"><div class="tech-step-num">①</div><span><strong>履歴管理：</strong>どのテーマで何を作ったか、いつでも過去に戻れる</span></div>
+      <div class="tech-step"><div class="tech-step-num">②</div><span><strong>ファイルセット管理：</strong>台本・音声・調査メモをエピソード単位でまとめて保存</span></div>
+      <div class="tech-step"><div class="tech-step-num">③</div><span><strong>安全性：</strong>ファイル単位で対象を管理し、意図しないファイルの混入を防ぐ</span></div>
+      <div class="tech-step"><div class="tech-step-num">④</div><span><strong>誤保存防止：</strong>設定ファイルや他エピソードは対象外。パス指定で厳密に管理</span></div>
+    </div>
+    <div class="tech-panel">
+      <div class="tech-panel-title"><span class="tech-panel-em">💻</span>Claude が実行する git コマンド</div>
+      <div class="code-block" style="font-size:.8rem;padding:14px 16px;">
+        <span class="code-comment"># その回のファイルだけを指定してステージング</span><br>
+        <span class="code-cmd">git add</span> <span class="code-str">"scripts/20260704_ep009_ラーメン.md"</span> \<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="code-str">"scripts/20260704_ep009_ラーメン.wav"</span> \<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="code-str">"knowledge/ramen_nutrition.md"</span><br><br>
+        <span class="code-comment"># コミット</span><br>
+        <span class="code-cmd">git commit</span> -m <span class="code-str">"Add ep009 script, audio, and knowledge: ラーメン"</span><br><br>
+        <span class="code-comment"># プッシュ（force は絶対に使わない）</span><br>
+        <span class="code-cmd">git push</span> origin main
+      </div>
+    </div>
+  </div>
+  <div class="left-b" style="max-width:960px">
+    💡 <strong><code style="background:#dbeafe;padding:1px 6px;border-radius:3px">git add .</code> は使わない。</strong>パス指定で対象ファイルだけをコミットするルールを Claude Code に事前定義しておくことで、意図しないファイルの混入を防ぐ。
+  </div>
+</div>
+
+<!-- ===== 9 まとめ ===== -->
+<div class="sl" data-i="8">
+  <div class="tag">まとめ</div>
+  <div class="sec-title">今日からできること</div>
+  <div class="ru3">
+    <div class="ru-item">
+      <div class="ru-num">01</div>
+      <div class="ru-title">テーマだけ渡す</div>
+      <div class="ru-body">調査・台本・音声・バックアップまで人間の介入ゼロ。「作る」コストを限りなく下げられる。</div>
+    </div>
+    <div class="ru-item">
+      <div class="ru-num">02</div>
+      <div class="ru-title">AIと一緒に設計する</div>
+      <div class="ru-body">コンセプトや構成もQ&amp;A形式でAIと決められる。このスライドの番組設計がまさにその例。</div>
+    </div>
+    <div class="ru-item">
+      <div class="ru-num">03</div>
+      <div class="ru-title">他の仕事に転用する</div>
+      <div class="ru-body">「調査 → 執筆 → 出力 → 保存」の流れがある仕事ならどこでも使える。</div>
+    </div>
+  </div>
+  <div class="final">
+    Claude Code の真価は<strong>「自動化の範囲を広げること」</strong>。<br>
+    コードを書くだけでなく、リサーチ・執筆・音声変換・バックアップまで<strong style="color:var(--green)">つなげられる</strong>。
+  </div>
+</div>
+
+</div>
+<div id="nav">
+  <button class="btn" id="prev" onclick="go(-1)" disabled>◀ 前へ</button>
+  <div id="cnt">1 / 9</div>
+  <button class="btn" id="next" onclick="go(1)">次へ ▶</button>
+  <button class="btn" id="narr-btn" onclick="toggleNarration()" style="margin-left:16px;border-color:var(--muted);color:var(--muted)">🔇 読み上げOFF</button>
+  <button class="btn" id="replay-btn" onclick="speak(cur)" style="border-color:var(--muted);color:var(--muted)">↺ 再生</button>
+</div>
+
+<script>
+const slides = document.querySelectorAll('.sl');
+const total = slides.length;
+let cur = 0;
+let narrationOn = false;
+
+/* ── ナレーション原稿 ── */
+const narration = [
+  /* 0: タイトル */
+  `このシステムは、テーマを渡すだけでラジオ番組の台本と音声ファイルを全自動で生成します。
+ツールはClaude Code、音声合成にはVOICEVOX、バックアップにはGitHubを使っています。`,
+
+  /* 1: 概要 */
+  `インプットはテキスト1行だけです。たとえば「ラーメンの回を作って」と渡すと、
+AIが論文や文献を調査して台本を書き、音声ファイルに変換し、GitHubへ自動バックアップするまでをすべて行います。
+途中で人間が介入する必要はありません。`,
+
+  /* 2: ブレインストーミング */
+  `今回の番組コンセプト自体も、AIとの対話を通じてゼロから設計しました。
+目的・テーマ・キャラクター・番組名まで、Q&A形式で決めていき、
+試作台本を作ってフィードバックするまでを1回のセッションで完了しています。
+コード生成だけでなく、企画や設計の段階からAIと一緒に進められます。`,
+
+  /* 3: キャラクター */
+  `今回のデモ番組は「ケンとハナの食卓バトル」です。
+ケンは食いしん坊の直感派で、とにかく食べることが優先。
+ハナは論文が友達のデータ派で、栄養・歴史・科学でズバッと諭します。
+毎回1つの料理をテーマに、この2人が雑談しながら深掘りするスタイルです。`,
+
+  /* 4: 台本サンプル */
+  `これはラーメン回のサンプルです。
+ケンが「今日ラーメン食べてきた」という話から始まり、
+ハナが塩分データで「1杯で推奨量オーバー」と反撃します。
+最後はハナがまとめて、ケンがオチをつける構成です。
+このやりとりはすべてAIが自動生成しました。`,
+
+  /* 5: 制作フロー */
+  `フローはテーマ入力から始まり、リサーチ・台本生成・チェック・音声変換・バックアップまで一直線に進みます。
+リサーチ工程では「栄養」「歴史」「文化」の担当を別々のAIに同時に割り当てる並列処理を採用しています。
+1つずつ順番にやるより大幅に速く、品質も向上します。`,
+
+  /* 6: VOICEVOX */
+  `音声生成はPythonスクリプトのtts.pyが担当します。
+台本のマークダウンファイルからセリフを抽出し、VOICEVOXのHTTP APIを2回叩いて音声データを取得します。
+1回目で音声クエリを生成し、2回目でWAVデータを合成する仕組みです。
+VOICEVOXが起動していない場合は自動で起動して待機するため、手動での起動作業は不要です。
+ケンとハナでスピーカーIDを切り替えることで、2人の声を使い分けています。`,
+
+  /* 7: GitHub */
+  `GitHubはバックアップとして使っています。
+エピソードごとに台本・音声・調査メモをセットで保存することで、過去のエピソードをいつでも参照できます。
+重要なポイントは、git add ドットを使わないことです。
+パス指定で対象ファイルだけをコミットするルールをClaude Codeにあらかじめ定義しておくことで、
+設定ファイルや他のエピソードが誤って混入するのを防いでいます。`,
+
+  /* 8: まとめ */
+  `まとめです。
+このシステムのポイントは3つです。
+まず、テーマを渡すだけで調査・台本・音声・バックアップまで全工程が自動で完了します。
+次に、コンセプト設計自体もAIとのQ&A対話で進められます。今日の発表内容がまさにその例です。
+そして、この仕組みは料理ラジオに限らず、調査・執筆・出力・保存という流れを持つ仕事であればどこでも転用できます。
+Claude Codeの真価は、自動化の範囲を広げることにあります。`
+];
+
+/* ── 読み上げ ── */
+function speak(index) {
+  if (!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  if (!narrationOn) return;
+  const utter = new SpeechSynthesisUtterance(narration[index]);
+  utter.lang = 'ja-JP';
+  utter.rate = 0.95;
+  utter.pitch = 1.0;
+  window.speechSynthesis.speak(utter);
+}
+
+function toggleNarration() {
+  narrationOn = !narrationOn;
+  const btn = document.getElementById('narr-btn');
+  if (narrationOn) {
+    btn.textContent = '🔊 読み上げON';
+    btn.style.borderColor = 'var(--green)';
+    btn.style.color = 'var(--green)';
+    speak(cur);
+  } else {
+    btn.textContent = '🔇 読み上げOFF';
+    btn.style.borderColor = 'var(--muted)';
+    btn.style.color = 'var(--muted)';
+    window.speechSynthesis.cancel();
+  }
+}
+
+/* ── スライド切替 ── */
+function updateUI() {
+  document.getElementById('cnt').textContent = (cur+1) + ' / ' + total;
+  document.getElementById('prev').disabled = cur === 0;
+  document.getElementById('next').disabled = cur === total-1;
+  document.getElementById('prog').style.width = ((cur+1)/total*100) + '%';
+}
+
+function go(dir) {
+  const next = cur + dir;
+  if (next < 0 || next >= total) return;
+  slides[cur].classList.remove('on');
+  cur = next;
+  slides[cur].classList.add('on');
+  updateUI();
+  speak(cur);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') go(1);
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   go(-1);
+});
+
+updateUI();
+</script>
+</body>
+</html>
