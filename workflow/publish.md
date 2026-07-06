@@ -6,13 +6,18 @@
 ## リモート
 - origin（main を追跡）。push 先は origin/main。
 
-## 対象ファイル（その回の生成物のみ）
+## 対象ファイル
+
+### エピソード生成時のcommit（このワークフローが対象とするもの）
 - scripts/YYYYMMDD_ep###_テーマ.md（台本）
 - scripts/YYYYMMDD_ep###_テーマ.wav（音声）
 - knowledge/〇〇.md（その回で新規作成・更新したナレッジ）
 
-設定ファイル（CLAUDE.md / tts.py / workflow/ など）や他回の生成物は対象に含めない。
-`git add -A` や `git add .` は使わず、必ずパス指定で add すること。
+他回の生成物はこのcommitに含めない。`git add -A` や `git add .` は使わず、必ずパス指定で add すること。
+
+### 設定ファイルの扱い
+CLAUDE.md / tts.py / workflow/ / characters/ / docs/ / README.md などの設定・構成ファイルは GitHub 上に存在する（リポジトリの一部）。
+ただしエピソード生成のたびに commit するものではなく、**内容を変更したときだけ別途 commit する**。
 
 ## 手順（確認なしで実行）
 1. 対象ファイルだけをステージング
